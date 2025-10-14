@@ -81,16 +81,14 @@ public class FinancialTracker {
             String line;
             while ((line =reader.readLine()) !=null) {
                 String[] tokens = line.split("\\|");
-                LocalDate date = LocalDate.parse(tokens[0], DATE_FMT);
-                LocalTime time = LocalTime.parse(tokens[1], TIME_FMT);
+                LocalDate date = LocalDate.parse(tokens[0]);
+                LocalTime time = LocalTime.parse(tokens[1]);
                 String description = tokens[2];
                 String vendor = tokens[3];
                 double amount = Double.parseDouble(tokens[4]);
 
                 Transaction transaction = new Transaction(date, time, description, vendor, amount);
 
-                //test
-                //System.out.println(transaction);
             }
             reader.close();
         } catch (IOException e) {
@@ -111,11 +109,11 @@ public class FinancialTracker {
      */
     private static void addDeposit(Scanner scanner) {
         // TODO
-        System.out.println("Date & time (yyyy-MM-dd HH:mm:ss):");
-        String dateAndTime = scanner.nextLine();
+        System.out.println("Date (yyyy-MM-dd):");
+        String date = scanner.nextLine();
 
-        LocalDateTime dateAndTimeFormatted = LocalDateTime.parse(dateAndTime, DATETIME_FMT);
-
+        System.out.println("Time(HH:mm:ss):");
+        String time = scanner.nextLine();
 
         System.out.println("Description:");
         String description = scanner.nextLine();
@@ -126,10 +124,13 @@ public class FinancialTracker {
         System.out.println("Amount (positive):");
         Double positiveAmount = Double.parseDouble(scanner.nextLine());
 
+        LocalDate dateFormatted = LocalDate.parse(date, DATE_FMT);
+        LocalTime timeFormatted = LocalTime.parse(time, TIME_FMT);
+
 
         try {
         BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
-        writer.write(dateAndTimeFormatted.format(DATETIME_FMT) + "|" + description + "|" + vendor + "|" + positiveAmount);
+        writer.write(dateFormatted.format(DATE_FMT) + "|" + timeFormatted.format(TIME_FMT)+ "|" + description + "|" + vendor + "|" + String.format("%.2f", positiveAmount));
         writer.newLine();
         writer.close();
         } catch (IOException e) {
