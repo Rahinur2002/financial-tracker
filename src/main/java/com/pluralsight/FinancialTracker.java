@@ -1,7 +1,8 @@
 package com.pluralsight;
 
-import java.io.File;
+import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class FinancialTracker {
 
             switch (input.toUpperCase()) {
                 case "D" -> addDeposit(scanner);
+
                 case "P" -> addPayment(scanner);
                 case "L" -> ledgerMenu(scanner);
                 case "X" -> running = false;
@@ -74,7 +76,27 @@ public class FinancialTracker {
         // TODO: create file if it does not exist, then read each line,
         //       parse the five fields, build a Transaction object,
         //       and add it to the transactions list.
+        //fileName = FILE_NAME;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME));
+            String line;
+            while ((line =reader.readLine()) !=null) {
+                String[] tokens = line.split("\\|");
+                LocalDate date = LocalDate.parse(tokens[0]);
+                LocalTime time = LocalTime.parse(tokens[1]);
+                String description = tokens[2];
+                String vendor = tokens[3];
+                double amount = Double.parseDouble(tokens[4]);
 
+                Transaction transaction = new Transaction(date, time, description, vendor, amount);
+
+                //test
+                //System.out.println(transaction);
+            }
+            reader.close();
+        } catch (IOException e) {
+            System.err.println("error reading file: " + FILE_NAME);
+        }
         //reader
     }
 
@@ -90,7 +112,25 @@ public class FinancialTracker {
      */
     private static void addDeposit(Scanner scanner) {
         // TODO
+        System.out.println("Date & time (yyyy-MM-dd HH:mm:ss):");
+        String dateAndTime = scanner.nextLine();
 
+        System.out.println("Description:");
+        String description = scanner.nextLine();
+
+        System.out.println("Vendor:");
+        String vendor = scanner.nextLine();
+
+        System.out.println("Amount (positive):");
+        Double positiveAmount = Double.parseDouble(scanner.nextLine());
+
+
+        try {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
+        writer.write(DATETIME_FMT.format(LocalDateTime.now()) + );
+        } catch (IOException e) {
+            System.err.print("Error writing to the file: " + FILE_NAME);
+        }
         //writer
     }
 
