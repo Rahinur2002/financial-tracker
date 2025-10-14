@@ -273,10 +273,27 @@ public class FinancialTracker {
        ------------------------------------------------------------------ */
     private static void displayLedger() {
         /* TODO – print all transactions in column format */
+        System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("=======================================================================");
+        for (Transaction t: transactions){
+            System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
+                    t.getDate().format(DATE_FMT),
+                    t.getTime().format(TIME_FMT),
+                    t.getDescription(),
+                    t.getVendor(),
+                    t.getAmount());
 
+        }
     }
 
-    private static void displayDeposits() { /* TODO – only amount > 0               */ }
+    private static void displayDeposits() {
+        /* TODO – only amount > 0               */
+        System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("=======================================================================");
+        for (int i = 0; i < transactions.size(); i++) {
+            if()
+        }
+    }
 
     private static void displayPayments() { /* TODO – only amount < 0               */ }
 
