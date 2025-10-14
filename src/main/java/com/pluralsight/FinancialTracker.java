@@ -225,9 +225,11 @@ public class FinancialTracker {
             }
         }
 
+        double negativeAmount = -Math.abs(positiveAmount);
+
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
-            writer.write(dateFormatted.format(DATE_FMT) + "|" + timeFormatted.format(TIME_FMT)+ "|" + description + "|" + vendor + "|" + String.format("%.2f", positiveAmount));
+            writer.write(dateFormatted.format(DATE_FMT) + "|" + timeFormatted.format(TIME_FMT)+ "|" + description + "|" + vendor + "|" + String.format("%.2f", negativeAmount));
             writer.newLine();
             System.out.println("Payment recorded!");
             writer.close();
