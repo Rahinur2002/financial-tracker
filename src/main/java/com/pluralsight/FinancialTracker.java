@@ -89,6 +89,7 @@ public class FinancialTracker {
 
                 Transaction transaction = new Transaction(date, time, description, vendor, amount);
 
+                transactions.add(transaction);
             }
             reader.close();
         } catch (IOException e) {
@@ -166,6 +167,7 @@ public class FinancialTracker {
         } catch (IOException e) {
             System.err.print("Error writing to the file: " + FILE_NAME);
         }
+        transactions.add(new Transaction(dateFormatted, timeFormatted, description, vendor, positiveAmount));
     }
 
     /**
@@ -236,7 +238,7 @@ public class FinancialTracker {
         } catch (IOException e) {
             System.err.print("Error writing to the file: " + FILE_NAME);
         }
-
+    transactions.add(new Transaction(dateFormatted, timeFormatted, description, vendor, negativeAmount));
     }
 
     /* ------------------------------------------------------------------
@@ -269,7 +271,10 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
-    private static void displayLedger() { /* TODO – print all transactions in column format */ }
+    private static void displayLedger() {
+        /* TODO – print all transactions in column format */
+
+    }
 
     private static void displayDeposits() { /* TODO – only amount > 0               */ }
 
