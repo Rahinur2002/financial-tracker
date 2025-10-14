@@ -158,6 +158,8 @@ public class FinancialTracker {
             }
         }
 
+        transactions.add(new Transaction(dateFormatted, timeFormatted, description, vendor, positiveAmount));
+
         try {
         BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
         writer.write(dateFormatted.format(DATE_FMT) + "|" + timeFormatted.format(TIME_FMT)+ "|" + description + "|" + vendor + "|" + String.format("%.2f", positiveAmount));
@@ -167,7 +169,6 @@ public class FinancialTracker {
         } catch (IOException e) {
             System.err.print("Error writing to the file: " + FILE_NAME);
         }
-        transactions.add(new Transaction(dateFormatted, timeFormatted, description, vendor, positiveAmount));
     }
 
     /**
@@ -228,7 +229,7 @@ public class FinancialTracker {
         }
 
         double negativeAmount = -Math.abs(positiveAmount);
-
+        transactions.add(new Transaction(dateFormatted, timeFormatted, description, vendor, negativeAmount));
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
             writer.write(dateFormatted.format(DATE_FMT) + "|" + timeFormatted.format(TIME_FMT)+ "|" + description + "|" + vendor + "|" + String.format("%.2f", negativeAmount));
@@ -238,7 +239,6 @@ public class FinancialTracker {
         } catch (IOException e) {
             System.err.print("Error writing to the file: " + FILE_NAME);
         }
-    transactions.add(new Transaction(dateFormatted, timeFormatted, description, vendor, negativeAmount));
     }
 
     /* ------------------------------------------------------------------
