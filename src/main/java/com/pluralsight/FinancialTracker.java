@@ -53,7 +53,6 @@ public class FinancialTracker {
 
             switch (input.toUpperCase()) {
                 case "D" -> addDeposit(scanner);
-
                 case "P" -> addPayment(scanner);
                 case "L" -> ledgerMenu(scanner);
                 case "X" -> running = false;
@@ -82,8 +81,8 @@ public class FinancialTracker {
             String line;
             while ((line =reader.readLine()) !=null) {
                 String[] tokens = line.split("\\|");
-                LocalDate date = LocalDate.parse(tokens[0]);
-                LocalTime time = LocalTime.parse(tokens[1]);
+                LocalDate date = LocalDate.parse(tokens[0], DATE_FMT);
+                LocalTime time = LocalTime.parse(tokens[1], TIME_FMT);
                 String description = tokens[2];
                 String vendor = tokens[3];
                 double amount = Double.parseDouble(tokens[4]);
@@ -115,6 +114,9 @@ public class FinancialTracker {
         System.out.println("Date & time (yyyy-MM-dd HH:mm:ss):");
         String dateAndTime = scanner.nextLine();
 
+        LocalDateTime dateAndTimeFormatted = LocalDateTime.parse(dateAndTime, DATETIME_FMT);
+
+
         System.out.println("Description:");
         String description = scanner.nextLine();
 
@@ -127,11 +129,14 @@ public class FinancialTracker {
 
         try {
         BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
-        writer.write(DATETIME_FMT.format(LocalDateTime.now()) + );
+        writer.write(dateAndTimeFormatted.format(DATETIME_FMT) + "|" + description + "|" + vendor + "|" + positiveAmount);
+        writer.newLine();
+        writer.close();
         } catch (IOException e) {
             System.err.print("Error writing to the file: " + FILE_NAME);
         }
         //writer
+
     }
 
     /**
