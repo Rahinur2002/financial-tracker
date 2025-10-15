@@ -356,7 +356,9 @@ public class FinancialTracker {
                     filterTransactionsByDate(start, end);
                 }
                 case "5" -> {/* TODO – prompt for vendor then report */
-
+                    System.out.println("Vendor: ");
+                    String vendor = scanner.nextLine();
+                    filterTransactionsByVendor(vendor);
                 }
                 case "6" -> customSearch(scanner);
                 case "0" -> running = false;
@@ -372,6 +374,7 @@ public class FinancialTracker {
         // TODO – iterate transactions, print those within the range
         System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("=======================================================================");
+        boolean isFound = false;
         for (Transaction t: transactions) {
             LocalDate userDate = t.getDate();
             if((userDate.isEqual(start) || userDate.isAfter(start)) &&
@@ -382,18 +385,40 @@ public class FinancialTracker {
                         t.getDescription(),
                         t.getVendor(),
                         t.getAmount());
+                isFound = true;
             }
+        }
+        if(!isFound){
+            System.out.println("There are no transaction found between " + start + " and " + end);
         }
     }
 
     private static void filterTransactionsByVendor(String vendor) {
         // TODO – iterate transactions, print those with matching vendor
 
+        System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("=======================================================================");
+        boolean isFound = false;
+        for (Transaction t: transactions) {
+            if(( vendor.equalsIgnoreCase(t.getVendor()))){
+                System.out.printf("%-12s %-10s %-20s %-15s %10.2f%n",
+                        t.getDate().format(DATE_FMT),
+                        t.getTime().format(TIME_FMT),
+                        t.getDescription(),
+                        t.getVendor(),
+                        t.getAmount());
+                isFound = true;
+            }
+        }
+        if(!isFound){
+            System.out.println("There are no transaction found with " + vendor);
+        }
     }
 
     private static void customSearch(Scanner scanner) {
         // TODO – prompt for any combination of date range, description,
         //        vendor, and exact amount, then display matches
+
     }
 
     /* ------------------------------------------------------------------
