@@ -149,7 +149,7 @@ public class FinancialTracker {
                 System.out.println("Amount (positive):");
                 positiveAmount = Double.parseDouble(scanner.nextLine());
                 if (positiveAmount <= 0){
-                    System.out.println("Invalid number. Please enter a positive number greater than zero");
+                    System.out.println("Invalid number. Please enter a positive number.");
                 } else {
                     validAmount = true;
                 }
@@ -219,7 +219,7 @@ public class FinancialTracker {
                 System.out.println("Amount (positive):");
                 positiveAmount = Double.parseDouble(scanner.nextLine());
                 if (positiveAmount <= 0){
-                    System.out.println("Invalid number. Please enter a positive number greater than zero");
+                    System.out.println("Invalid number. Please enter a positive number.");
                 } else {
                     validAmount = true;
                 }
@@ -419,6 +419,56 @@ public class FinancialTracker {
         // TODO – prompt for any combination of date range, description,
         //        vendor, and exact amount, then display matches
 
+        System.out.print("Enter start date (yyyy-MM-dd, blank = none):");
+        String startDate = scanner.nextLine();
+
+        System.out.print("Enter end date (yyyy-MM-dd, blank = none):");
+        String endDate = scanner.nextLine();
+
+        System.out.print("Description:");
+        String description = scanner.nextLine();
+
+        System.out.print("Vendor:");
+        String vendor = scanner.nextLine();
+
+        System.out.print("Amount (positive):");
+        String amount = scanner.nextLine();
+
+        LocalDate formattedStartDate = parseDate(startDate);
+        LocalDate formattedEndDate = parseDate(endDate);
+        Double parsedAmount = parseDouble(amount);
+
+        System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("=======================================================================");
+        for( Transaction t: transactions) {
+            boolean found = true;
+
+            if(formattedStartDate != null && t.getDate().isBefore(formattedStartDate)){
+                found = false;
+            }
+            if(formattedEndDate != null && t.getDate().isAfter(formattedEndDate)){
+                found = false;
+            }
+            if(!description .isEmpty() && !t.getDescription().toLowerCase().contains(description.toLowerCase())){
+                found = false;
+            }
+            if(!vendor .isEmpty() && !t.getVendor().toLowerCase().contains(vendor.toLowerCase())) {
+                found = false;
+            }
+            if(parsedAmount != null && Double.compare(t.getAmount(), parsedAmount) !=0){
+                found = false;
+            }
+
+            if(found) {
+                System.out.printf("%-12s %-10s %-20s %-15s %10.2f%n",
+                        t.getDate().format(DATE_FMT),
+                        t.getTime().format(TIME_FMT),
+                        t.getDescription(),
+                        t.getVendor(),
+                        t.getAmount());
+            }
+        }
+
     }
 
     /* ------------------------------------------------------------------
@@ -426,11 +476,26 @@ public class FinancialTracker {
        ------------------------------------------------------------------ */
     private static LocalDate parseDate(String s) {
         /* TODO – return LocalDate or null */
-        return null;
+        if (s == null || s.isEmpty()) {
+            return null;
+        }
+            try {
+                return LocalDate.parse(s, DATE_FMT);
+           } catch (Exception e) {
+                System.out.println("invalid date. Please enter the date in this format (yyyy-MM-dd), example: 2012-10-20");
+                return null;
+            }
     }
-
     private static Double parseDouble(String s) {
         /* TODO – return Double   or null */
-        return null;
+        if(s == null || s.isEmpty()) {
+            return null;
+        }
+        try {
+            return Double.parseDouble(s);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a positive number");
+            return null;
+        }
     }
 }
