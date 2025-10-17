@@ -181,7 +181,6 @@ public class FinancialTracker {
     }
 
     private static void addPayment(Scanner scanner) {
-        // TODO
         LocalDate dateFormatted = null;
         LocalTime timeFormatted = null;
 
