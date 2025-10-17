@@ -29,9 +29,6 @@ public class FinancialTracker {
     public static final String GREEN = "\u001B[32m";
     public static final String RESET = "\u001B[0m";
 
-
-
-
     /* ------------------------------------------------------------------
        Main menu
        ------------------------------------------------------------------ */
@@ -61,7 +58,6 @@ public class FinancialTracker {
         }
         scanner.close();
     }
-
     /* ------------------------------------------------------------------
        File I/O
        ------------------------------------------------------------------ */
@@ -108,7 +104,6 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Add new transactions
        ------------------------------------------------------------------ */
-
     private static void addDeposit(Scanner scanner) {
         LocalDate dateFormatted = null;
         LocalTime timeFormatted = null;
@@ -250,7 +245,6 @@ public class FinancialTracker {
             return d2.getTime().compareTo(d1.getTime());
         });
     }
-
     /* ------------------------------------------------------------------
        Ledger menu
        ------------------------------------------------------------------ */
@@ -277,54 +271,31 @@ public class FinancialTracker {
             }
         }
     }
-
     /* ------------------------------------------------------------------
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
     private static void displayLedger() {
-        System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        System.out.println("=======================================================================");
+        defaultHeader();
         for (Transaction t: transactions){
-            System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
-                    t.getDate().format(DATE_FMT),
-                    t.getTime().format(TIME_FMT),
-                    t.getDescription(),
-                    t.getVendor(),
-                    amountColor(t.getAmount()));
-
+            defaultOutput(t);
         }
     }
-
     private static void displayDeposits() {
-        System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        System.out.println("=======================================================================");
+        defaultHeader();
         for (Transaction t: transactions) {
             if(t.getAmount() > 0){
-                System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
-                        t.getDate().format(DATE_FMT),
-                        t.getTime().format(TIME_FMT),
-                        t.getDescription(),
-                        t.getVendor(),
-                        amountColor(t.getAmount()));
+                defaultOutput(t);
             }
         }
     }
-
     private static void displayPayments() {
-        System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        System.out.println("=======================================================================");
+        defaultHeader();
         for (Transaction t: transactions) {
             if(t.getAmount() < 0){
-                System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
-                        t.getDate().format(DATE_FMT),
-                        t.getTime().format(TIME_FMT),
-                        t.getDescription(),
-                        t.getVendor(),
-                        amountColor(t.getAmount()));
+                defaultOutput(t);
             }
         }
           }
-
     /* ------------------------------------------------------------------
        Reports menu
        ------------------------------------------------------------------ */
@@ -344,27 +315,27 @@ public class FinancialTracker {
             String input = scanner.nextLine().trim();
 
             switch (input) {
-                case "1" -> {/* TODO – month-to-date report */
+                case "1" -> {
                     LocalDate start = LocalDate.now().withDayOfMonth(1);
                     LocalDate end = LocalDate.now();
                     filterTransactionsByDate(start, end);
                 }
-                case "2" -> {/* TODO – previous month report */
+                case "2" -> {
                     LocalDate start = LocalDate.now().minusMonths(1).withDayOfMonth(1);
                     LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
                     filterTransactionsByDate(start, end);
                 }
-                case "3" -> {/* TODO – year-to-date report   */
+                case "3" -> {
                     LocalDate start = LocalDate.now().withDayOfYear(1);
                     LocalDate end = LocalDate.now();
                     filterTransactionsByDate(start, end);
                 }
-                case "4" -> {/* TODO – previous year report  */
+                case "4" -> {
                     LocalDate start = LocalDate.now().minusYears(1).withDayOfYear(1);
                     LocalDate end = start.withDayOfYear(start.lengthOfYear());
                     filterTransactionsByDate(start, end);
                 }
-                case "5" -> {/* TODO – prompt for vendor then report */
+                case "5" -> {
                     System.out.println("Vendor: ");
                     String vendor = scanner.nextLine();
                     filterTransactionsByVendor(vendor);
@@ -380,19 +351,13 @@ public class FinancialTracker {
        Reporting helpers
        ------------------------------------------------------------------ */
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
-        System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        System.out.println("=======================================================================");
+        defaultHeader();
         boolean isFound = false;
         for (Transaction t: transactions) {
             LocalDate userDate = t.getDate();
             if((userDate.isEqual(start) || userDate.isAfter(start)) &&
                     (userDate.isEqual(end) || userDate.isBefore(end))){
-                System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
-                        userDate.format(DATE_FMT),
-                        t.getTime().format(TIME_FMT),
-                        t.getDescription(),
-                        t.getVendor(),
-                        amountColor(t.getAmount()));
+                defaultOutput(t);
                 isFound = true;
             }
         }
@@ -402,17 +367,11 @@ public class FinancialTracker {
     }
 
     private static void filterTransactionsByVendor(String vendor) {
-        System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        System.out.println("=======================================================================");
+        defaultHeader();
         boolean isFound = false;
         for (Transaction t: transactions) {
             if(( vendor.equalsIgnoreCase(t.getVendor()))){
-                System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
-                        t.getDate().format(DATE_FMT),
-                        t.getTime().format(TIME_FMT),
-                        t.getDescription(),
-                        t.getVendor(),
-                        amountColor(t.getAmount()));
+                defaultOutput(t);
                 isFound = true;
             }
         }
@@ -441,8 +400,7 @@ public class FinancialTracker {
         LocalDate formattedEndDate = parseDate(endDate, scanner);
         Double parsedAmount = parseDouble(amount);
 
-        System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        System.out.println("=======================================================================");
+       defaultHeader();
 
         for( Transaction t: transactions) {
             boolean found = false;
@@ -463,12 +421,7 @@ public class FinancialTracker {
             }
 
             if(found) {
-                System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
-                        t.getDate().format(DATE_FMT),
-                        t.getTime().format(TIME_FMT),
-                        t.getDescription(),
-                        t.getVendor(),
-                        amountColor(t.getAmount()));
+              defaultOutput(t);
             }
         }
     }
@@ -508,5 +461,18 @@ public class FinancialTracker {
             return GREEN + String.format("%.2f", amount) + RESET;
         }
         return RED + String.format("%.2f", amount) + RESET;
+    }
+
+    private static void defaultHeader(){
+        System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("=======================================================================");
+    }
+    private static void defaultOutput(Transaction t){
+        System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
+                t.getDate().format(DATE_FMT),
+                t.getTime().format(TIME_FMT),
+                t.getDescription(),
+                t.getVendor(),
+                amountColor(t.getAmount()));
     }
 }
