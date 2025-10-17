@@ -20,7 +20,7 @@ the option to only view incoming money or money I need to pay off.
 
 ## Setup
 
-![gif demo](https://s7.ezgif.com/tmp/ezgif-7f7197995cf973.gif)
+![gif startup](https://s7.ezgif.com/tmp/ezgif-7f7197995cf973.gif)
 
 ### Prerequisites
 
