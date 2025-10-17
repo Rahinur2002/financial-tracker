@@ -25,6 +25,13 @@ public class FinancialTracker {
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern(TIME_PATTERN);
     private static final DateTimeFormatter DATETIME_FMT = DateTimeFormatter.ofPattern(DATETIME_PATTERN);
 
+    public static final String RED = "\u001B[31m";
+    public static final String GREEN = "\u001B[32m";
+    public static final String RESET = "\u001B[0m";
+
+
+
+
     /* ------------------------------------------------------------------
        Main menu
        ------------------------------------------------------------------ */
@@ -276,16 +283,15 @@ public class FinancialTracker {
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
     private static void displayLedger() {
-        /* TODO – print all transactions in column format */
         System.out.printf("%-12s %-10s %-20s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("=======================================================================");
         for (Transaction t: transactions){
-            System.out.printf("%-12s %-10s %-20s %-15s %10.2f%n",
+            System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
                     t.getDate().format(DATE_FMT),
                     t.getTime().format(TIME_FMT),
                     t.getDescription(),
                     t.getVendor(),
-                    t.getAmount());
+                    amountColor(t.getAmount()));
 
         }
     }
@@ -295,12 +301,12 @@ public class FinancialTracker {
         System.out.println("=======================================================================");
         for (Transaction t: transactions) {
             if(t.getAmount() > 0){
-                System.out.printf("%-12s %-10s %-20s %-15s %10.2f%n",
+                System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
                         t.getDate().format(DATE_FMT),
                         t.getTime().format(TIME_FMT),
                         t.getDescription(),
                         t.getVendor(),
-                        t.getAmount());
+                        amountColor(t.getAmount()));
             }
         }
     }
@@ -310,12 +316,12 @@ public class FinancialTracker {
         System.out.println("=======================================================================");
         for (Transaction t: transactions) {
             if(t.getAmount() < 0){
-                System.out.printf("%-12s %-10s %-20s %-15s %10.2f%n",
+                System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
                         t.getDate().format(DATE_FMT),
                         t.getTime().format(TIME_FMT),
                         t.getDescription(),
                         t.getVendor(),
-                        t.getAmount());
+                        amountColor(t.getAmount()));
             }
         }
           }
@@ -382,12 +388,12 @@ public class FinancialTracker {
             LocalDate userDate = t.getDate();
             if((userDate.isEqual(start) || userDate.isAfter(start)) &&
                     (userDate.isEqual(end) || userDate.isBefore(end))){
-                System.out.printf("%-12s %-10s %-20s %-15s %10.2f%n",
+                System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
                         userDate.format(DATE_FMT),
                         t.getTime().format(TIME_FMT),
                         t.getDescription(),
                         t.getVendor(),
-                        t.getAmount());
+                        amountColor(t.getAmount()));
                 isFound = true;
             }
         }
@@ -402,12 +408,12 @@ public class FinancialTracker {
         boolean isFound = false;
         for (Transaction t: transactions) {
             if(( vendor.equalsIgnoreCase(t.getVendor()))){
-                System.out.printf("%-12s %-10s %-20s %-15s %10.2f%n",
+                System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
                         t.getDate().format(DATE_FMT),
                         t.getTime().format(TIME_FMT),
                         t.getDescription(),
                         t.getVendor(),
-                        t.getAmount());
+                        amountColor(t.getAmount()));
                 isFound = true;
             }
         }
@@ -458,12 +464,12 @@ public class FinancialTracker {
             }
 
             if(found) {
-                System.out.printf("%-12s %-10s %-20s %-15s %10.2f%n",
+                System.out.printf("%-12s %-10s %-20s %-15s %10s%n",
                         t.getDate().format(DATE_FMT),
                         t.getTime().format(TIME_FMT),
                         t.getDescription(),
                         t.getVendor(),
-                        t.getAmount());
+                        amountColor(t.getAmount()));
             }
         }
     }
@@ -496,5 +502,12 @@ public class FinancialTracker {
                 System.out.println("Invalid input. Please enter a valid positive number: ");
                 return null;
             }
+    }
+
+    private static String amountColor(double amount) {
+        if(amount >= 0) {
+            return GREEN + String.format("%.2f", amount) + RESET;
+        }
+        return RED + String.format("%.2f", amount) + RESET;
     }
 }
